@@ -1,0 +1,38 @@
+import pandas as pd
+from kpi_calculator import KPICalculator
+from visualization import plot_kpi_trend, plot_ltv_distribution
+
+# Load sample user activity data
+data = pd.read_csv('data/user_activity.csv')
+
+# Initialize KPI calculator
+kpi_calc = KPICalculator(data)
+
+# Calculate Daily Active Users (DAU)
+dau = kpi_calc.calculate_daily_active_users()
+print("Daily Active Users (DAU):")
+print(dau)
+
+# Calculate Monthly Active Users (MAU)
+mau = kpi_calc.calculate_monthly_active_users()
+print("\nMonthly Active Users (MAU):")
+print(mau)
+
+# Calculate User Engagement (Average sessions per user)
+engagement = kpi_calc.calculate_user_engagement()
+print(f"\nUser Engagement (Average Sessions per User): {engagement}")
+
+# Calculate Retention Rate (30 days)
+retention_rate = kpi_calc.calculate_retention_rate()
+print(f"\n30-Day Retention Rate: {retention_rate * 100:.2f}%")
+
+# Calculate Lifetime Value (LTV)
+ltv = kpi_calc.calculate_lifetime_value()
+print(f"\nEstimated Lifetime Value (LTV): ${ltv:.2f}")
+
+# Visualize Daily Active Users trend
+plot_kpi_trend(dau, 'date', 'daily_active_users', 'Daily Active Users (DAU) Over Time')
+
+# Visualize LTV Distribution
+user_ltv = data.groupby('user_id')['revenue'].sum()
+plot_ltv_distribution(user_ltv)
